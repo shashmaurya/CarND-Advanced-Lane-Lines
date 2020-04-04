@@ -71,11 +71,6 @@ The output images are written in the folder 'test_images_output'. One of them is
 
 #### 2. Describe how (and identify where in your code) you used color transforms, gradients or other methods to create a thresholded binary image.  Provide an example of a binary image result.
 
-I used a combination of color and gradient thresholds to generate a binary image (thresholding steps at lines # through # in `another_file.py`).  Here's an example of my output for this step.  (note: this is not actually from one of the test images)
-
-![alt text][image3]
-
-
 
 Code in section 2.2 perfoms the requirements of this step. A function `apply_threshold()` receives the image and applies the thresholds for HKS and Sobel. 
 Sobel derivate is determined using function `cv2.Sobel()` on the lightness channel. Absolute values of the gradient are used.
@@ -94,6 +89,7 @@ Both the thresholds are combined into one binary image and returned.
 
 #### 3. Describe how (and identify where in your code) you performed a perspective transform and provide an example of a transformed image.
 
+__P2.ipynb section 2.3__
 The implementation for this section is via a function `warp_image()` which accepts the image and `src` and `dst` points as arguments. The prespective transform matrix is obtained using the function `cv2.getPerspectiveTransform()`. For later use, M inverse is also determined at this point by switching  `src` and `dst` inputs. The `warp_image()` returns the warped image as output.
 
 A helper function `draw_lines` is used to draw the lines connecting the source and destination points, over the image using `cv2.ine()`, and `cv2.addWeighted()`.
@@ -125,10 +121,7 @@ The source and destination points were plotted over the image for verification.
 
 #### 4. Describe how (and identify where in your code) you identified lane-line pixels and fit their positions with a polynomial?
 
-Then I did some other stuff and fit my lane lines with a 2nd order polynomial kinda like this:
-
-![alt text][image5]
-
+__P2.ipynb section 2.4__
 
 Using the binary warped image from the last step, I identify the lane pixels. A function `find_lane_pixels()` perfoms this step, using the histogram obtained by summation of binary pixel values. This is obtained in both the left and right half of the image for left and right lane respectively. The hyperparameters are defined to set a margin or 100 pixels for the summation and a threshold of minimum 50 pixels to be counted.
 
@@ -145,6 +138,8 @@ A different function `fit_polynomial()` calculates the curve fitting for the lan
 
 #### 5. Describe how (and identify where in your code) you calculated the radius of curvature of the lane and the position of the vehicle with respect to center.
 
+__P2.ipynb section 2.5__
+
 The radius of curvature is calculated inside the function `measure_curvature()`. Inside the function we define the y point where we want to determine the curvature and use the polynomial coefficients to determine the left and right radii of curvature.
 
 `calculate_offset()` function calculates the offset by taking the difference between mid-point of two lanes, and the mid point of the image.
@@ -155,6 +150,7 @@ The underlying assumption here is that the center of the image is aligned with t
 
 #### 6. Provide an example image of your result plotted back down onto the road such that the lane area is identified clearly.
 
+__P2.ipynb section 2.6__
 
 The final step of this pipline was to inverse warp the lane markings back onto the original image. I used the `Minv` perspective transfrom matrix determined earlier. I defined function `warp_inv_lanes()` which takes both the images, the polynomial fit, the Minv, and the offset parameters to apply the inverse warping. 
 
@@ -164,7 +160,7 @@ Left and right lane points are stacked using `np.hstack()` and `cv2.fillPoly` is
 ![alt text][image8]
 
 
-
+__P2.ipynb section 2.7__
 
 The section 2.7 sets the function that acts a the pipline and calls all the necessary functions defined above, to process the image from start to end.
 `set_param_values()` defines the necessary parameters, and then`pipeline()` calls the functions in correct order get the final image.
@@ -177,6 +173,8 @@ The section 2.7 sets the function that acts a the pipline and calls all the nece
 ### Pipeline (video)
 
 #### 1. Provide a link to your final video output.  Your pipeline should perform reasonably well on the entire project video (wobbly lines are ok but no catastrophic failures that would cause the car to drive off the road!).
+
+__P2.ipynb section 3__
 
 Using the pipeline used for images, I set up a pipeline for videos. The function `pipeline` is passed as argument to the `clip1.fl_image()` where `clip1` is the video input.
 The output of the video looks satisfactory
