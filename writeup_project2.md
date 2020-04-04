@@ -19,13 +19,16 @@ The goals / steps of this project are the following:
 
 [//]: # (Image References)
 
-[image1]: ./examples/undistort_output.png "Undistorted"
-[image2]: ./test_images/test1.jpg "Road Transformed"
-[image3]: ./examples/binary_combo_example.jpg "Binary Example"
-[image4]: ./examples/warped_straight_lines.jpg "Warp Example"
-[image5]: ./examples/color_fit_lines.jpg "Fit Visual"
-[image6]: ./examples/example_output.jpg "Output"
-[video1]: ./project_video.mp4 "Video"
+[image1]: ./writeup_images/chessboard_Undistorted.png "Undistorted Chessboard"
+[image2]: ./writeup_images/undistorted_test_image.png "Undistorted Test Image"
+[image3]: ./writeup_images/threshold_binary_testimage.png "Binary Image"
+[image4]: ./writeup_images/undistorted_warped.png "Warped Image"
+[image5]: ./writeup_images/identify_lane_pixels.png "Straight Lane Polynomial Fit"
+[image6]: ./writeup_images/identify_lane_pixels_curved.png "Curved Polynomial Fit"
+[image7]: ./writeup_images/camera_lane_offset.png "Lane-Vehicle Offset"
+[image8]: ./writeup_images/inv_warp_fill.png "Inverse Warped Lane"
+[image9]: ./writeup_images/final_lane_hgihlighted.png "Final Output"
+[video1]: ./output_video/project_video.mp4 "Project Video"
 
 ## [Rubric](https://review.udacity.com/#!/rubrics/571/view) Points
 
@@ -50,7 +53,7 @@ The code prepares the "object points", which will be the (x, y, z) coordinates o
 
 I wrote a function `image_undistorted` which uses undistorts the image passed as argument, using `objpoints` and `imgpoints`, also provided as arguments. Next, using the `cv2.calibrateCamera()` function I obtained the parameters `mtx` and `dist` used next. I applied this distortion correction to a chessboard image using the `cv2.undistort()` function and obtained this result: 
 
-![alt text][./writeup_images/chessboard_Undistorted.png "Undistorted Chessboard"]
+![alt text][image1]
 
 
 ### Pipeline (single images)
@@ -63,7 +66,7 @@ Iterating through the folder I read each image using `mpimg.imread()` and call t
 
 The output images are written in the folder 'test_images_output'. One of them is displayed as an example.
 
-![alt text][./writeup_images/undistorted_test_image.png "Undistorted Test Image"]
+![alt text][image2]
 
 
 #### 2. Describe how (and identify where in your code) you used color transforms, gradients or other methods to create a thresholded binary image.  Provide an example of a binary image result.
@@ -85,7 +88,7 @@ Saturation Threshold for color: `(170, 255)`
 
 Both the thresholds are combined into one binary image and returned.
 
-![alt text][./writeup_images/threshold_binary_testimage.png "Binary Image"]
+![alt text][image3]
 
 
 
@@ -116,7 +119,7 @@ dst = np.float32([[margin,0],
 ```
 The source and destination points were plotted over the image for verification.
 
-![alt text][./writeup_images/undistorted_warped.png "Warped Image"]
+![alt text][image4]
 
 
 
@@ -135,9 +138,9 @@ An array of the identified points is returned for left and right lanes. An image
 
 A different function `fit_polynomial()` calculates the curve fitting for the lane lines. It calls the `find_lane_pixels()` function and to receive the arrays for points. Then it uses `np.polyfit()` is used to fit a 2nd degree polynomial using the points obtained in the last step. It returns the polynomial coefficients for left and right lane curves.
 
-![alt text][./writeup_images/identify_lane_pixels.png "Straight Lane Polynomial Fit"]
+![alt text][image5]
 
-![alt text][./writeup_images/identify_lane_pixels_curved.png "Curved Polynomial Fit"]
+![alt text][image6]
 
 
 #### 5. Describe how (and identify where in your code) you calculated the radius of curvature of the lane and the position of the vehicle with respect to center.
@@ -147,7 +150,7 @@ The radius of curvature is calculated inside the function `measure_curvature()`.
 `calculate_offset()` function calculates the offset by taking the difference between mid-point of two lanes, and the mid point of the image.
 The underlying assumption here is that the center of the image is aligned with the vehicle center.
 
-![alt text][./writeup_images/camera_lane_offset.png "Lane-Vehicle Offset"]
+![alt text][image7]
 
 
 #### 6. Provide an example image of your result plotted back down onto the road such that the lane area is identified clearly.
@@ -158,7 +161,7 @@ The final step of this pipline was to inverse warp the lane markings back onto t
 Left and right lane points are stacked using `np.hstack()` and `cv2.fillPoly` is used to fill the area with `[0,255,0]` (green color).
 `cv2.warpPerspective` is again used for the warping.
 
-![alt text][./writeup_images/inv_warp_fill.png "Inverse Warped Lane"]
+![alt text][image8]
 
 
 
@@ -166,7 +169,7 @@ Left and right lane points are stacked using `np.hstack()` and `cv2.fillPoly` is
 The section 2.7 sets the function that acts a the pipline and calls all the necessary functions defined above, to process the image from start to end.
 `set_param_values()` defines the necessary parameters, and then`pipeline()` calls the functions in correct order get the final image.
 
-![alt text][./writeup_images/final_lane_hgihlighted.png "Final Output"]
+![alt text][image9]
 
 
 ---
@@ -178,7 +181,7 @@ The section 2.7 sets the function that acts a the pipline and calls all the nece
 Using the pipeline used for images, I set up a pipeline for videos. The function `pipeline` is passed as argument to the `clip1.fl_image()` where `clip1` is the video input.
 The output of the video looks satisfactory
 
-Here's a [link to my video result](./output_video/project_video.mp4)
+Here's a [link to my video result](video1)
 
 ---
 
